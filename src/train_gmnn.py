@@ -38,8 +38,6 @@ def pre_train(trainer_q, data, epochs):
                 break
     trainer_q.model.load_state_dict(state['model'])
     trainer_q.optimizer.load_state_dict(state['optim'])
-    # _, val_acc, preds_test = trainer_q.evaluate(data.x, data.edge_index, data.y, data.test_mask)
-    # print("q_acc", val_acc)
 
 def update_p_data(trainer_q, data, gmnn_args):
     preds = trainer_q.predict(data.x, data.edge_index, gmnn_args.tau)
@@ -67,7 +65,6 @@ def train_p(trainer_p, trainer_q, data, epoch, args):
     inputs_p, target_p = update_p_data(trainer_q, data, args)
     results = []
     idx_all = torch.ones_like(data.val_mask, device=data.val_mask.device).bool()
-    # Add early stopping
     vlss_mn = float('Inf')
     vacc_mx = 0.0
     best_preds_test = 0.0
@@ -75,19 +72,6 @@ def train_p(trainer_p, trainer_q, data, epoch, args):
         loss = trainer_p.update_soft(inputs_p, data.edge_index, target_p, idx_all)
         val_loss, val_acc, _ = trainer_p.evaluate(inputs_p, data.edge_index, data.y, data.val_mask)
         _, _, preds_test = trainer_p.evaluate(inputs_p, data.edge_index, data.y, data.test_mask)
-    #     if val_acc >= vacc_mx or val_loss <= vlss_mn:
-    #         if val_acc >= vacc_mx and val_loss <= vlss_mn:
-    #             state = dict([('model', copy.deepcopy(trainer_p.model.state_dict())), ('optim', copy.deepcopy(trainer_p.optimizer.state_dict()))])
-    #             best_preds_test = preds_test
-    #         vacc_mx = max(val_acc, vacc_mx) 
-    #         vlss_mn = min(val_loss, vlss_mn)
-    #         curr_step = 0
-    #     else:
-    #         curr_step += 1
-    #         if curr_step >= patience:
-    #             break
-    # trainer_p.model.load_state_dict(state['model'])
-    # trainer_p.optimizer.load_state_dict(state['optim'])
     return preds_test, inputs_p
 
 def update_q_data(trainer_p, inputs_p, data, gmnn_args):
@@ -102,7 +86,6 @@ def update_q_data(trainer_p, inputs_p, data, gmnn_args):
 def train_q(trainer_q, trainer_p, inputs_p, data, epoch, args):
     target_q = update_q_data(trainer_p, inputs_p, data, args)
     idx_all = torch.ones_like(data.val_mask, device=data.val_mask.device).bool()
-    # Add early stopping
     vlss_mn = float('Inf')
     vacc_mx = 0.0
     best_preds_test = 0.0
@@ -110,19 +93,6 @@ def train_q(trainer_q, trainer_p, inputs_p, data, epoch, args):
         loss = trainer_q.update_soft(data.x, data.edge_index, target_q, idx_all)
         val_loss, val_acc, _ = trainer_q.evaluate(data.x, data.edge_index, data.y, data.val_mask)
         _, _, preds_test = trainer_q.evaluate(data.x, data.edge_index, data.y, data.test_mask)
-    #     if val_acc >= vacc_mx or val_loss <= vlss_mn:
-    #         if val_acc >= vacc_mx and val_loss <= vlss_mn:
-    #             state = dict([('model', copy.deepcopy(trainer_q.model.state_dict())), ('optim', copy.deepcopy(trainer_q.optimizer.state_dict()))])
-    #             best_preds_test = preds_test
-    #         vacc_mx = max(val_acc, vacc_mx) 
-    #         vlss_mn = min(val_loss, vlss_mn)
-    #         curr_step = 0
-    #     else:
-    #         curr_step += 1
-    #         if curr_step >= patience:
-    #             break
-    # trainer_q.model.load_state_dict(state['model'])
-    # trainer_q.optimizer.load_state_dict(state['optim'])
     return preds_test
 
 def main(split, init, args):
