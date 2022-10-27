@@ -2,7 +2,11 @@
 Source code of the paper "A Graph Is More Than Its Nodes: Towards Structured Uncertainty-Aware Learning on Graphs"
 
 ### Edgewise Uncertainty Metircs
-![alt text](https://github.com/hans66hsu/structured_uncertainty_metrics/blob/main/figure/edgewise_example.png?raw=true)
+
+| |Nodewise | Edgewise | Agree | Disagree 
+|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+GNNs |<img src="./figure/Nodewise_reliability_Cora_GCN-1.png" width="150"><br><img src="./figure/Nodewise_reliability_Cora_GAT-1.png" width="150">  |  <img src="./figure/Edgewise_reliability_Cora_GCN-1.png" width="150"><br><img src="./figure/Edgewise_reliability_Cora_GAT-1.png" width="150"> |  <img src="./figure/Agree_reliability_Cora_GCN-1.png" width="150"><br><img src="./figure/Agree_reliability_Cora_GAT-1.png" width="150"> |  <img src="./figure/Disagree_reliability_Cora_GCN-1.png" width="150"><br><img src="./figure/Disagree_reliability_Cora_GAT-1.png" width="150">
+Structured<br>Prediction<br>Models |<img src="./figure/Nodewise_reliability_Cora_GMNN-1.png" width="150"><br><img src="./figure/Nodewise_reliability_Cora_EPFGNN-1.png" width="150"> |  <img src="./figure/Edgewise_reliability_Cora_GMNN-1.png" width="150"><br><img src="./figure/Edgewise_reliability_Cora_EPFGNN-1.png" width="150"> |  <img src="./figure/Agree_reliability_Cora_GMNN-1.png" width="150"><br><img src="./figure/Agree_reliability_Cora_EPFGNN-1.png" width="150"> |  <img src="./figure/Disagree_reliability_Cora_GMNN-1.png" width="150"><br><img src="./figure/Disagree_reliability_Cora_EPFGNN-1.png" width="150">
 
 ## Requirements
 
@@ -29,7 +33,7 @@ pip install -r requirements.txt
 PYTHONPATH=. python src/train.py --dataset Cora --model GCN
 PYTHONPATH=. python src/train.py --dataset Cora --model GAT
 ```
-* Train structured prediction models(`GMNN` or `EPFGNN`). Combining GNNs with markov network to model the output joint distribution.
+* Train structured prediction models(`GMNN` or `EPFGNN`). These models combinine GNNs with markov networks to model the output joint distribution.
 ```
 PYTHONPATH=. python src/train_gmnn.py --dataset Cora --model GMNN
 PYTHONPATH=. python src/train_epfgnn.py --dataset Cora --model EPFGNN
