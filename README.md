@@ -1,5 +1,5 @@
 # structured_uncertainty_metrics
-Source code of the paper "A Graph Is More Than Its Nodes: Towards Structured Uncertainty-Aware Learning on Graphs"
+Source code of the paper "A Graph Is More Than Its Nodes: Towards Structured Uncertainty-Aware Learning on Graphs" [[Paper](http://arxiv.org/abs/2210.15575)]
 
 ### Edgewise Uncertainty Metircs
 
