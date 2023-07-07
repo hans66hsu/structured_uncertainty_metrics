@@ -73,7 +73,7 @@ def main(split, init, args):
                     if val_acc >= vacc_mx and val_loss <= vlss_mn:
                         state_dict_early_model = copy.deepcopy(model.state_dict())
                         b_epoch = i
-                        best_result.update({'prob':log_prob,
+                        best_result.update({'log_prob':log_prob,
                                             'acc':accs[1],
                                             'nll':nlls[1],
                                             'bs':briers[1],
@@ -86,12 +86,12 @@ def main(split, init, args):
                     if curr_step >= patience:
                         break
         
-        eval = NodewiseMetrics(best_result['prob'], data.y, data.test_mask)
+        eval = NodewiseMetrics(best_result['log_prob'], data.y, data.test_mask)
         acc, nll, brier, ece = eval.acc(), eval.nll(), eval.brier(), eval.ece()
         test_result['acc'].append(acc); test_result['nll'].append(nll); test_result['bs'].append(brier)
         test_result['ece'].append(ece)
 
-        del best_result['prob']
+        del best_result['log_prob']
         for metric in best_result:
             val_result[metric].append(best_result[metric])
 

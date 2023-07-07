@@ -13,20 +13,20 @@ from src.utils import set_global_seeds, arg_parse, name_model, create_nested_def
                         metric_mean, metric_std, save_prediction, plot_reliabilities
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 
-def eval(data, prob, mask_name, eval_type, edge_choice: str='both'):
+def eval(data, log_prob, mask_name, eval_type, edge_choice: str='both'):
     mask, global_mask = get_masks(mask_name, data)
     eval_result = {}
     eval_edge_index = get_edge_indices(edge_choice, data, mask, global_mask)
     ag_edge_index = ag_dis_edge_index(eval_edge_index, data.y, 'agree')
     dis_edge_index = ag_dis_edge_index(eval_edge_index, data.y, 'disagree')
     if eval_type == 'Nodewise':
-        eval = NodewiseMetrics(prob, data.y, mask)
+        eval = NodewiseMetrics(log_prob, data.y, mask)
     elif eval_type == 'Edgewise':
-        eval = EdgewiseMetrics(prob, data.y, eval_edge_index)
+        eval = EdgewiseMetrics(log_prob, data.y, eval_edge_index)
     elif eval_type == 'Agree':
-        eval = EdgewiseMetrics(prob, data.y, ag_edge_index)
+        eval = EdgewiseMetrics(log_prob, data.y, ag_edge_index)
     elif eval_type == 'Disagree':
-        eval = EdgewiseMetrics(prob, data.y, dis_edge_index)
+        eval = EdgewiseMetrics(log_prob, data.y, dis_edge_index)
     else:
         raise ValueError('unknown eval_type')
 
